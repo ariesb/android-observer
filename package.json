@@ -1,0 +1,32 @@
+{
+	"name": "android-device-recorder",
+	"version": "1.0.0",
+	"description": "Simple android video recorder",
+	"keywords": [
+		"Android",
+		"observer",
+		"capture",
+		"video"
+	],
+	"homepage": "",
+	"bugs": {
+		"url": ""
+	},
+	"license": "CC0-1.0",
+	"author": "GitHub",
+	"main": "main.js",
+	"repository": {
+		"type": "git",
+		"url": "g"
+	},
+	"scripts": {
+		"start": "electron ."
+	},
+	"dependencies": {
+		"every-moment": "0.0.1",
+		"split-lines": "^1.1.0"
+	},
+	"devDependencies": {
+		"electron-prebuilt": "^1.2.0"
+	}
+}

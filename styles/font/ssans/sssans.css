@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'sssansl';
+    src: url('samsungsans-light-webfont.woff2') format('woff2'),
+         url('samsungsans-light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'sssansr';
+    src: url('samsungsans-regular-webfont.woff2') format('woff2'),
+         url('samsungsans-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
