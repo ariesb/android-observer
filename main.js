@@ -10,7 +10,7 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 400, height: 150,
+  mainWindow = new BrowserWindow({width: 275, height: 200,
     frame: false, title: "Android Device Recorder"})
 
   // and load the index.html of the app.

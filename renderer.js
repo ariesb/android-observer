@@ -7,7 +7,11 @@ const remote = require('electron').remote;
 var is_recording = false,
   is_saving = false,
   devices = {},
-  recorder = null;
+  recorder = null,
+  resourcePath = '.';
+
+resourcePath = process.resourcesPath + '/app';
+resourcePath = ".";
 
 var every = require('every-moment');
 var timer = every(5, 'second', function() {
@@ -21,7 +25,7 @@ get_devices();
 function get_devices() {
   console.log('Getting Devices');
   const execFile = require('child_process').execFile;
-  const child = execFile('./adb', ['devices'], (error, stdout, stderr) => {
+  const child = execFile(resourcePath + '/adb', ['devices'], (error, stdout, stderr) => {
     if (error) {
       throw error;
     }
@@ -44,7 +48,7 @@ function get_devices() {
 
 function get_device_props(deviceSerial) {
   const execFile = require('child_process').execFile;
-  const child = execFile('./adb', ['-s', deviceSerial, 'shell', 'getprop'], (error, stdout, stderr) => {
+  const child = execFile(resourcePath + '/adb', ['-s', deviceSerial, 'shell', 'getprop'], (error, stdout, stderr) => {
     if (error) {
       throw error;
     }
@@ -121,6 +125,12 @@ function display_device_info(deviceSerial, deviceInfo) {
   document.getElementById('no-device-connected').style.display = 'none';
   document.getElementById('main-background').style.display = '';
   document.getElementById('device-found').style.display = '';
+
+  if(deviceInfo.androidVersion < "4.4") {
+    document.getElementById('rec-video').setAttribute('data-animation', 'disabled');
+  } else {
+    document.getElementById('rec-video').setAttribute('data-animation', '');
+  }
 }
 
 function create_new_filename() {
@@ -133,7 +143,7 @@ function record_device_activity(deviceSerial) {
   document.getElementById('dev-record-file').innerHTML = filename;
   const execFile = require('child_process').execFile;
   is_recording = true;
-  recorder = execFile('./adb', ['-s', deviceSerial, 'shell', 'screenrecord', '--bit-rate', '6000000', '--verbose', '/sdcard/' + filename], (error, stdout, stderr) => {
+  recorder = execFile(resourcePath + '/adb', ['-s', deviceSerial, 'shell', 'screenrecord', '--bit-rate', '6000000', '--verbose', '/sdcard/' + filename], (error, stdout, stderr) => {
     if (error) {
       // throw error;
       console.log('Got error', error);
@@ -145,10 +155,22 @@ function record_device_activity(deviceSerial) {
   });
 }
 
+function compress_video(filename, cb) {
+  const compress = require('child_process').spawn;
+
+  // 320p ./ffmpeg -i observer_1470043546937.mp4 -codec:v libx264 -profile:v baseline -preset slow -b:v 250k -maxrate 250k -bufsize 500k -vf scale=-1:320 -threads 0 -codec:a libfdk_aac -b:a 96k output.mp4
+  // 480p ./ffmpeg -i observer_1470043546937.mp4 -codec:v libx264 -profile:v main -preset slow -b:v 400k -maxrate 400k -bufsize 800k -vf scale=-1:480 -threads 0 -codec:a libfdk_aac -b:a 128k output.mp4
+
+  var vzip = compress('./ffmpeg', ['-i', './' +  filename, '-b', '1000000', './vzip_' + filename]);
+  vzip.on('close', (code) => {
+    cb();
+  });
+}
+
 function download_video_asc() {
   const spawn = require('child_process').spawn;
   var filename = document.getElementById('dev-record-file').innerHTML;
-  const ls = spawn('./adb', ['pull', '-p', '/sdcard/' + filename]);
+  const ls = spawn(resourcePath + '/adb', ['pull', '-p', '/sdcard/' + filename]);
 
   ls.stderr.on('data', (data) => {
     var percentage = data.toString().trim();
@@ -170,8 +192,10 @@ function download_video_asc() {
 
       delete_remote_recording(document.getElementById('dev-serial').innerHTML);
 
-      const vidfile = require('child_process').spawn;
-      const qt = vidfile('open', ['./' +  filename]);
+      compress_video(filename, function(){
+        const vidfile = require('child_process').spawn;
+        const qt = vidfile('open', ['./vzip_' +  filename]);
+      });
     }, 600);
   });
 }
@@ -179,7 +203,7 @@ function download_video_asc() {
 function delete_remote_recording(deviceSerial) {
   var filename = document.getElementById('dev-record-file').innerHTML;
   const execFile = require('child_process').execFile;
-  var child = execFile('./adb', ['-s', deviceSerial, 'shell', 'rm', '-f', '/sdcard/' + filename], (error, stdout, stderr) => {
+  var child = execFile(resourcePath + '/adb', ['-s', deviceSerial, 'shell', 'rm', '-f', '/sdcard/' + filename], (error, stdout, stderr) => {
     if (error) {
       console.log('Error removing remote file.');
       throw error;
@@ -244,42 +268,73 @@ function download_video_asc_legacy() {
 }
 
 
-function take_screencap(filename) {
+function take_screencap(filename, cb) {
   const execFile = require('child_process').execFile;
-  execFile('./adb', ['shell', 'screencap', '/sdcard/' + filename], (error, stdout, stderr) => {
+  var capture = execFile(resourcePath + '/adb', ['shell', 'screencap', '/sdcard/' + filename], (error, stdout, stderr) => {
     if (error) {
       console.log('Got error', error);
     }
   });
+
+  capture.on('close', (code) => {
+    console.log('Done capturing.');
+    cb();
+  });
 }
 
-function pull_screencap(filename) {
+function pull_screencap(filename, cb) {
   const execFile = require('child_process').execFile;
-  execFile('./adb', ['pull', '/sdcard/' + filename, './screencaps/' + filename], (error, stdout, stderr) => {
+  var cap_get = execFile(resourcePath + '/adb', ['pull', '/sdcard/' + filename, './screencaps/' + filename], (error, stdout, stderr) => {
     if (error) {
       console.log('Got error', error);
     }
+  });
+
+  cap_get.on('close', (code) => {
+    console.log('Done pulling.');
+    cb();
   });
 }
 
 document.getElementById('rec-video').addEventListener('click', function(event) {
+  var andv = document.getElementById('dev-android-version').innerHTML;
+  if(andv < "4.4") {
+    return;
+  }
+
   if (is_saving) return;
 
   if (!is_recording && !is_saving) {
     // start recording
     this.setAttribute('data-animation', 'record');
-    record_device_activity_legacy(document.getElementById('dev-serial').innerHTML);
+    record_device_activity(document.getElementById('dev-serial').innerHTML);
     is_recording = true;
   } else {
     // start saving
     this.setAttribute('data-animation', 'save');
     document.getElementById('rec-perc').innerHTML = '0';
     is_saving = true;
-    stop_recording_legacy(document.getElementById('dev-serial').innerHTML);
+    stop_recording(document.getElementById('dev-serial').innerHTML);
   }
 });
 
 document.getElementById('close-app').addEventListener('click', function(event) {
   var window = remote.getCurrentWindow();
   window.close();
+});
+
+document.getElementById('capture-shot').addEventListener('click', function(event) {
+  var filename = create_new_filename() + '_cap.png';
+  console.log('Screen capturing to ', filename);
+  take_screencap(filename, function(){
+    console.log('Start to pull data.');
+    setTimeout(function() {
+      pull_screencap(filename, function(){
+        console.log('Pulling screen cap', filename);
+        const pictureview = require('child_process').spawn;
+        pictureview('open', ['./screencaps/' +  filename]);
+      });
+    }, 1000);
+  });
+
 });
