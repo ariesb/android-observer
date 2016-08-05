@@ -1,6 +1,8 @@
 const electron = require('electron')
 // Module to control application life.
 const app = electron.app
+const Tray = electron.Tray
+
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
@@ -8,16 +10,23 @@ const BrowserWindow = electron.BrowserWindow
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+console.log(app.getPath('home'))
+
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 275, height: 200,
-    frame: false, title: "Android Device Recorder"})
+    frame: false,
+    title: "Android Device Recorder",
+    icon: 'images/icon.png'})
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+  const nativeImage = electron.nativeImage
+  let image = nativeImage.createFromPath(__dirname + '/images/icon.png')
+  app.dock.setIcon(image)
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

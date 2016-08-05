@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Android Observer</title>
-  <link rel="stylesheet" href="styles/font/ssans/sssans.css">
+  <link rel="stylesheet" href="styles/font-montserrat.css">
   <link rel="stylesheet" href="styles/main.css">
 </head>
 
@@ -101,17 +101,23 @@
   </svg>
   <div id="no-device-connected" style="-webkit-app-region: drag; z-index: 2; width: 275px; height: 200px; background: url('images/connectyourdevice.jpg') no-repeat; position: absolute; top: 0; left: 0;">
   </div>
-  <div id="device-found" style="z-index: 2; position: absolute; top: 0; left: 0; width: 400px; height: 150px; -webkit-app-region: drag;">
+  <div id="device-found" style="z-index: 2; position: absolute; top: 0; left: 0; width: 400px; height: 150px; -webkit-app-region: drag; display: none">
     <div id="dev-serial" style="display: none"></div>
     <div class="deviceinfo">
       <div class="make" id="dev-manufacturer"></div>
       <div class="model" id="dev-model"></div>
-      <div id="dev-android"><span class="version" id="dev-android-version"></span><span id="dev-android-name"></span></div>
+      <div id="dev-android">
+        <span class="version" id="dev-android-version"></span>
+        <span id="dev-android-name"></span>
+      </div>
     </div>
-    <a id="rec-video" class="rec-button" data-animation="" href="#">
-      <span id="rec-perc"></span>
-    </a>
-    <div id="capture-shot"><i class="camera-icon"></i></div>
+    <div id="options">
+      <div id="opts">
+        <a id="opt-video" class="opt-cta">Record a Video</a>
+        <br><a id="opt-snap" class="opt-cta">Take a Screenshot</a></div>
+    </div>
+    <div id="activity">
+    </div>
   </div>
   <div class="circCont">
     <button id="close-app" class="circle" data-animation="showShadow"></button>
