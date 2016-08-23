@@ -1,0 +1,332 @@
+.app {
+  font: 14px/24px "m-light", Helvetica, Arial, sans-serif;
+}
+
+.container {
+    width: 275px;
+    height: 200px;
+    position: relative;
+    margin: 30px auto 40px;
+    -webkit-perspective: 800px;
+    -moz-perspective: 800px;
+    -o-perspective: 800px;
+    perspective: 800px;
+}
+
+section, footer, nav {
+    display: block;
+}
+
+
+#card {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    -webkit-transition: -webkit-transform 1s;
+    -moz-transition: -moz-transform 1s;
+    -o-transition: -o-transform 1s;
+    transition: transform 1s;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-app-region: drag;
+}
+
+#card .nodevice {
+    background: url('../images/usb.png') no-repeat;
+    background-color: #244;
+    background-size: 100%;
+}
+
+#card .nodevice .message {
+  font: 15px 'm-hairline';
+  color: #ddd;
+  text-transform: uppercase;
+  top: 60px;
+  position: relative;
+}
+
+#card .nodevice .message-sub {
+  font: 10px 'm-hairline';
+  color: #aaa;
+  text-transform: uppercase;
+  top: 60px;
+  position: relative;
+}
+
+#card figure {
+    display: block;
+    height: 100%;
+    width: 100%;
+    line-height: 260px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 140px;
+    position: absolute;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 10px;
+}
+
+figure {
+    margin: 0;
+}
+
+#card .device {
+    background: url('../images/connected.png') no-repeat;
+    background-size: cover;
+    -webkit-transform: rotateY( 180deg );
+    -moz-transform: rotateY( 180deg );
+    -o-transform: rotateY( 180deg );
+    transform: rotateY( 180deg );
+}
+
+#card.flipped {
+    -webkit-transform: rotateY( 180deg );
+    -moz-transform: rotateY( 180deg );
+    -o-transform: rotateY( 180deg );
+    transform: rotateY( 180deg );
+}
+
+div#options {
+  font: 12px "m-light";
+  position: absolute;
+  top: 130px;
+  left: 30px;
+  text-transform: uppercase;
+  color: #aaa;
+  text-align: justify;
+}
+.opt-cta {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  margin-bottom: 6px;
+  padding: 2px 0 2px 0;
+}
+.opt-cta:hover:before {
+  visibility: visible;
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}
+.opt-cta:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  visibility: hidden;
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  -moz-transition: all 0.3s ease-in-out 0s;
+  -o-transition: all 0.3s ease-in-out 0s;
+  transition: all 0.3s ease-in-out 0s;
+  -webkit-transform: scaleX(0);
+  -moz-transform: scaleX(0);
+  -o-transform: scaleX(0);
+  transform: scaleX(0);
+}
+div#activity {
+  font: 12px "m-light";
+  position: absolute;
+  top: 145px;
+  left: 31px;
+}
+
+.deviceinfo {
+  left: 30px;
+  top: 20px;
+  position: absolute;
+  cursor: default;
+}
+
+
+div#dev-manufacturer {
+  font: 18px "m-hairline";
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 10px 0 0;
+  margin: 0;
+  text-align: justify;
+  -webkit-user-select: none;
+}
+div#dev-model {
+  padding: 0;
+  margin: 0;
+  font: 32px "m-light";
+  font-weight: bolder;
+  -webkit-user-select: none;
+}
+
+div#dev-android-version {
+  padding: 0;
+  margin: 0;
+  color: #ddd;
+  font: 18px "m-hairline";
+  position: absolute;
+  top: 70px;
+  -webkit-user-select: none;
+  vertical-align:middle;
+}
+span#dev-android-name {
+  color: #333;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 4px 6px;
+  margin-left: 5px;
+  box-shadow: 2px 4px 4px -4px rgba(138, 130, 138, 1);
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  -webkit-user-select: none;
+  position: relative;
+  top: -3px;
+}
+button:focus {
+  outline: none;
+}
+button:focus {
+  outline: none;
+}
+
+div#activity {
+  font: 12px "m-light";
+  position: absolute;
+  top: 145px;
+  left: 31px;
+}
+
+.recording {
+  animation: fadeIn 1s infinite alternate;
+  position: absolute;
+  top: 2px;
+  left: 135px;
+  color: #de164a;
+  text-transform: uppercase;
+  font: 12px 'm-semi';
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.circCont {
+  display: inline-block;
+  z-index: 10;
+  right: -10px;
+  top: 0px;
+  position: absolute;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: 1px solid #fff;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  margin: 10px 20px;
+  -webkit-app-region: no-drag;
+}
+.circle:after {
+  width: 20px;
+  height: 2px;
+  background-color: #fff;
+  content: "";
+  left: 50%;
+  top: 50%;
+  margin-left: -10px;
+  margin-top: 0px;
+  position: absolute;
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  /*@include transform-origin(100%,100%);*/
+}
+.circle:before {
+  left: 50%;
+  top: 50%;
+  margin-left: -10px;
+  margin-top: 0px;
+  width: 20px;
+  height: 2px;
+  background-color: #fff;
+  content: "";
+  position: absolute;
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  /*@include transform-origin(0%,0%);*/
+}
+.circle+ p {
+  text-transform: lowercase;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.circle[data-animation="showShadow"] {
+  -moz-box-shadow: 0px 0px 0px 0px #fff inset;
+  -webkit-box-shadow: 0px 0px 0px 0px #fff inset;
+  box-shadow: 0px 0px 0px 0px #fff inset;
+  -moz-transition: cubic-bezier(0.175, 0.885, 0.52, 1.775) 200ms;
+  -o-transition: cubic-bezier(0.175, 0.885, 0.52, 1.775) 200ms;
+  -webkit-transition: cubic-bezier(0.175, 0.885, 0.52, 1.775) 200ms;
+  transition: cubic-bezier(0.175, 0.885, 0.52, 1.775) 200ms;
+  border: 0px solid white;
+}
+.circle[data-animation="showShadow"]:before, .circle[data-animation="showShadow"]:after {
+  -moz-transition: cubic-bezier(0.175, 0.885, 0.52, 1.775) 200ms;
+  -o-transition: cubic-bezier(0.175, 0.885, 0.52, 1.775) 200ms;
+  -webkit-transition: cubic-bezier(0.175, 0.885, 0.52, 1.775) 200ms;
+  transition: cubic-bezier(0.175, 0.885, 0.52, 1.775) 200ms;
+}
+.circle[data-animation="showShadow"]:not(.showShadow):hover {
+  -moz-box-shadow: 0px 0px 0px 2px #fff inset;
+  -webkit-box-shadow: 0px 0px 0px 2px #fff inset;
+  box-shadow: 0px 0px 0px 2px #fff inset;
+}
+.circle[data-animation="showShadow"]:not(.showShadow):hover:before {
+  -moz-transform: scale(0.7) rotate(45deg);
+  -ms-transform: scale(0.7) rotate(45deg);
+  -webkit-transform: scale(0.7) rotate(45deg);
+  transform: scale(0.7) rotate(45deg);
+  -moz-transition-delay: 100ms;
+  -o-transition-delay: 100ms;
+  -webkit-transition-delay: 100ms;
+  transition-delay: 100ms;
+}
+.circle[data-animation="showShadow"]:not(.showShadow):hover:after {
+  -moz-transform: scale(0.7) rotate(-45deg);
+  -ms-transform: scale(0.7) rotate(-45deg);
+  -webkit-transform: scale(0.7) rotate(-45deg);
+  transform: scale(0.7) rotate(-45deg);
+  -moz-transition-delay: 100ms;
+  -o-transition-delay: 100ms;
+  -webkit-transition-delay: 100ms;
+  transition-delay: 100ms;
+}
+.circle.showShadow {
+  -moz-transition: ease-out 300ms;
+  -o-transition: ease-out 300ms;
+  -webkit-transition: ease-out 300ms;
+  transition: ease-out 300ms;
+  -moz-transform: scale(0);
+  -ms-transform: scale(0);
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  opacity: 0;
+}

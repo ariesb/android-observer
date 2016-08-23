@@ -419,6 +419,7 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pr
 html, body {
   font: 14px/24px "m-light", Helvetica, Arial, sans-serif;
   color: #fff;
+  background: transparent;
 }
 .deviceinfo {
   left: 30px;

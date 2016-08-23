@@ -4,8 +4,39 @@
  */
 const remote = require('electron').remote;
 
+Element.prototype.hasClassName = function (a) {
+    return new RegExp("(?:^|\\s+)" + a + "(?:\\s+|$)").test(this.className);
+};
+
+Element.prototype.addClassName = function (a) {
+    if (!this.hasClassName(a)) {
+        this.className = [this.className, a].join(" ");
+    }
+};
+
+Element.prototype.removeClassName = function (b) {
+    if (this.hasClassName(b)) {
+        var a = this.className;
+        this.className = a.replace(new RegExp("(?:^|\\s+)" + b + "(?:\\s+|$)", "g"), " ");
+    }
+};
+
+Element.prototype.toggleClassName = function (a) {
+  this[this.hasClassName(a) ? "removeClassName" : "addClassName"](a);
+};
+
+Element.prototype.about = function (b) {
+  this.toggleClassName('flopped');
+  var current = this.getElementsByClassName('nodevice')[0];
+  var about = this.getElementsByClassName('about')[0];
+  about.style.display = b ? 'block' : 'none';
+  current.style.display = b ? 'none' : 'block';
+};
+
+var card = document.getElementById('card');
 var is_recording = false,
   is_saving = false,
+  is_connected = false,
   devices = {},
   recorder = null,
   resourcePath = process.resourcesPath + '/app',
@@ -15,8 +46,6 @@ var is_recording = false,
 const adb = process.platform + "/adb";
 const ffmpeg = process.platform + '/ffmpeg';
 
-console.log(resourcePath)
-
 var every = require('every-moment');
 var timer = every(5, 'second', function() {
   if (!is_recording) {
@@ -25,6 +54,9 @@ var timer = every(5, 'second', function() {
 });
 get_devices();
 
+require('electron').ipcRenderer.on('check-devices', (event, message) => {
+  get_devices();
+})
 
 function get_devices() {
   console.log('Getting Devices');
@@ -93,9 +125,12 @@ function clear_device() {
   document.getElementById('dev-manufacturer').innerHTML = '';
   document.getElementById('dev-model').innerHTML = '';
   document.getElementById('dev-android-version').innerHTML = '';
-  document.getElementById('no-device-connected').style.display = '';
-  document.getElementById('main-background').style.display = 'none';
-  document.getElementById('device-found').style.display = 'none';
+
+  if(is_connected) {
+    card.toggleClassName('flipped');
+  }
+
+  is_connected = false;
 }
 
 function androidn(v) {
@@ -124,11 +159,13 @@ function display_device_info(deviceSerial, deviceInfo) {
   document.getElementById('dev-serial').innerHTML = deviceSerial;
   document.getElementById('dev-manufacturer').innerHTML = deviceInfo.manufacturer;
   document.getElementById('dev-model').innerHTML = deviceInfo.model;
-  document.getElementById('dev-android-version').innerHTML = deviceInfo.androidVersion;
-  document.getElementById('dev-android-name').innerHTML = androidn(deviceInfo.androidVersion);
-  document.getElementById('no-device-connected').style.display = 'none';
-  document.getElementById('main-background').style.display = '';
-  document.getElementById('device-found').style.display = '';
+  document.getElementById('dev-android-version').innerHTML = deviceInfo.androidVersion + '<span id="dev-android-name">' + androidn(deviceInfo.androidVersion) + '</span>';
+
+  if(!is_connected) {
+      card.toggleClassName('flipped');
+  }
+
+  is_connected = true;
 
   if (deviceInfo.androidVersion < "4.4") {
     document.getElementById('opt-video').innerHTML = "";

@@ -1,7 +1,7 @@
 {
 	"name": "android-observer",
 	"version": "1.0.0",
-	"description": "Simple android video recorder",
+	"description": "Android Device Recorder",
 	"keywords": [
 		"Android",
 		"observer",
@@ -9,7 +9,7 @@
 		"video"
 	],
 	"bugs": {},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"author": "GitHub",
 	"main": "main.js",
 	"repository": {
@@ -19,9 +19,11 @@
 	"scripts": {
 		"start": "electron .",
 		"pack:osx": "electron-packager . $npm_package_productName --overwrite --out=dist/osx --platform=darwin --arch=x64 --icon=./images/icon.icns",
-		"pack:win32": "electron-packager . $npm_package_productName --out=dist/win --platform=win32 --arch=ia32",
+		"pack:win32": "electron-packager . $npm_package_productName --out=dist/win --platform=win32 --arch=ia32 --prune=true",
 		"pack:win64": "electron-packager . $npm_package_productName --out=dist/win --platform=win32 --arch=x64 --version=0.36.2 app-version=1.0 --icon=assets/build/win/icon.ico",
 		"build": "npm run pack:osx && npm run pack:win32 && npm run pack:win64",
+		"pack-mac": "electron-packager . --ignore={win32,dist}/* --asar --asar-unpack=protocol-link.html --overwrite --platform=darwin --arch=x64 --icon=images/icon.icns --prune=true --out=dist/darwin --osx-sign.identity='Aries Beltran' --extend-info=assets/mac/info.plist",
+		"pack-win": "electron-packager . AndroidObserver --ignore={darwin,assets,dist}/* --asar --asar-unpack=protocol-link.html --overwrite --platform=win32 --arch=ia32 --icon=assets/win32/observer.ico --prune=true --out=dist/win32 --version-string.CompanyName='Aries Beltran' --version-string.FileDescription='Android Observer' --version-string.ProductName='Android Observer'",
 		"test": "echo test complete."
 	},
 	"dependencies": {
@@ -31,5 +33,6 @@
 	"devDependencies": {
 		"electron-packager": "^7.3.0",
 		"electron-prebuilt": "^1.2.0"
-	}
+	},
+	"productName": "Android Observer"
 }
